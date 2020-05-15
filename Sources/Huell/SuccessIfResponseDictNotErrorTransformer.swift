@@ -15,7 +15,7 @@ struct SuccessIfResponseDictNotErrorTransformer: ResponseTransformer {
         case .success(let entity):
             // cause network response to fail if we parse the response JSON is a Hue API error
             if let responseArray: [HueError] = try? HueAPI.sharedInstance.jsonDecoder.decode([HueError].self, from: entity.content as! Data) {
-                let hueError: HueError? = responseArray?[0]
+                let hueError: HueError? = responseArray[0]
                 let requestError = RequestError(userMessage: hueError?.error.description ?? "none", cause: NetworkError.hueAPIError(type: APIErrorType.init(rawValue:hueError?.error.type ?? 0)), entity: entity)
                 return logTransformation(.failure(requestError))
             } else {
