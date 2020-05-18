@@ -9,7 +9,7 @@
 import UIKit
 import CoreLocation
 
-class Constants {
+public class Constants {
     static let numDaysScheduledAhead = 7
     
     enum HueAPI {
@@ -41,6 +41,7 @@ class Constants {
     static let username = "Sol App"
     static let deviceType = "Test"
     static let currentBridgeIP = "192.168.1.211"
+    static let authToken = "authToken"
     static let emulatedIP = "localhost"
     
     // MARK: test region
@@ -117,7 +118,6 @@ class Constants {
         static let sunriseTempKey = "sunriseTempKey"
         static let sunsetBrightnessKey = "sunsetBrightnessKey"
         static let sunsetTempKey = "sunsetTempKey"
-        static let emulateBridgeKey = "emulateBridgeKey"
         static let daysOfWeekActive = "weekdaysActiveKey"
     }
 

@@ -16,16 +16,14 @@ enum APIErrorType: Int {
 }
 
 public class HueAPI {
-    public static let sharedInstance = HueAPI(baseIP: UserDefaults.standard.value(forKey: Constants.UserDefaultsKeys.currentBridgeIP) as? String, authTokenUsername: UserDefaults.standard.value(forKey: Constants.UserDefaultsKeys.apiUsername) as? String)
+    public static let sharedInstance = HueAPI(baseIP: Constants.currentBridgeIP, authTokenUsername: Constants.authToken)
 
-    fileprivate static var emulated: Bool {
-        return UserDefaults.standard.value(forKey: Constants.UserDefaultsKeys.emulateBridgeKey) as? Bool ?? false
-    }
+    static var emulated: Bool = false
     
-    fileprivate var authToken: String?
+    public var authToken: String?
     fileprivate var liveService: Service?
     fileprivate var emulatedService: Service?
-    fileprivate var baseIP: String?
+    public var baseIP: String?
     
     // signifies if we have a connection to the bridge
     fileprivate var canConnect: Bool?
@@ -109,7 +107,6 @@ public class HueAPI {
     
     public func clearAPIUsername() {
         authToken = nil
-        UserDefaults.standard.set(nil, forKey: Constants.UserDefaultsKeys.apiUsername)
     }
     
     // TODO: unpublic?
@@ -121,7 +118,6 @@ public class HueAPI {
                 if let response = self.successResponseDict(fromHueResponseArray: entity.jsonArray as! [[AnyHashable : Any]]) {
                     if let username = response["username"] as? String {
                         self.authToken = username
-                        UserDefaults.standard.set(self.authTokenUsername, forKey: Constants.UserDefaultsKeys.apiUsername)
                     }
                 }
         }).onFailure({

@@ -14,9 +14,11 @@ extension Date {
     }
     
     func relative(toTimeZone timeZone: TimeZone) -> Date {
+        return relative(toTimeZone: timeZone, respectsDST: true)
+    }
+    
+    func relative(toTimeZone timeZone: TimeZone, respectsDST: Bool) -> Date {
         var dstOffset: TimeInterval = 0
-        
-        let respectsDST = UserDefaults.standard.bool(forKey: Constants.UserDefaultsKeys.respectsDSTKey)
         
         if respectsDST {
             dstOffset = timeZone.daylightSavingTimeOffset()
