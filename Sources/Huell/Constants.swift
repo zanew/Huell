@@ -12,7 +12,7 @@ import CoreLocation
 public class Constants {
     static let numDaysScheduledAhead = 7
     
-    enum HueAPI {
+    public enum HueAPI {
         enum MiredColorTemps {
             static let coolest = 153
             static let warmest = 500

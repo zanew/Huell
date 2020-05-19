@@ -23,4 +23,6 @@ public struct DaysOfWeekActive: OptionSet {
     public static let saturday = DaysOfWeekActive(rawValue: 1 << 6)
     
     public static let weekdaysOnly: DaysOfWeekActive = [.monday, .tuesday, .wednesday, .thursday, .friday]
+    
+    public static let allDays: DaysOfWeekActive = [.sunday, .monday, .tuesday, .wednesday, .thursday, .friday, .saturday]
 }

@@ -21,8 +21,11 @@ public class HueAPI {
     static var emulated: Bool = false
     
     public var authToken: String?
+    
     fileprivate var liveService: Service?
     fileprivate var emulatedService: Service?
+    var activeDays: DaysOfWeekActive = .allDays
+    
     public var baseIP: String?
     
     // signifies if we have a connection to the bridge

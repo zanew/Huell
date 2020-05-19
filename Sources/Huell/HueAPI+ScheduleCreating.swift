@@ -9,6 +9,7 @@
 import Foundation
 
 protocol ScheduleCreating {
+    var daysOfWeekActive: DaysOfWeekActive { get }
     var morningSchedule: Schedule { get }
     var dawnSchedule: Schedule { get }
     var middaySchedule: Schedule { get }
@@ -24,6 +25,16 @@ protocol ScheduleCreating {
 
 // MARK: dimming and brightening schedule POST strings
 extension HueAPI: ScheduleCreating {
+    var daysOfWeekActive: DaysOfWeekActive {
+        get {
+            HueAPI.sharedInstance.activeDays
+        }
+        
+        set {
+            HueAPI.sharedInstance.activeDays = newValue
+        }
+    }
+    
     func schedule(withBrightness brightness: Int, hue: Int, date: Date, on: Bool = true) -> Schedule {
         let body = Body(on: true, brightness: brightness, hue: hue)
         let command = Command(address: allDevicesActionEndpoint, method: .PUT, body: body)
@@ -38,7 +49,12 @@ extension HueAPI: ScheduleCreating {
     
     func postStrings(fromSchedules schedules: [Schedule]) throws -> [String] {
         let stringList = try schedules.map(postString(fromSchedule:))
-        return stringList
+        let weekdayList = stringList.map(insertAPIWeekdayFlagStrings(intoPostString:))
+        return weekdayList
+    }
+    
+    func insertAPIWeekdayFlagStrings(intoPostString string: String) -> String {
+        insertAPIWeekdayFlagStrings(intoPostString: string, weekdayIntegerFlag: HueAPI.sharedInstance.daysOfWeekActive.rawValue)
     }
     
     func insertAPIWeekdayFlagStrings(intoPostString string: String, weekdayIntegerFlag: UInt) -> String {
@@ -64,7 +80,7 @@ extension HueAPI: ScheduleCreating {
         let string = String(data: data, encoding: .utf8)!
         
         var weekDayInt: UInt = 0
-        let defaultsValue = UInt(UserDefaults.standard.integer(forKey: Constants.UserDefaultsKeys.daysOfWeekActive))
+        let defaultsValue = HueAPI.sharedInstance.daysOfWeekActive.rawValue
         if defaultsValue == 0 {
             weekDayInt = Constants.SettingsDefaults.daysOfWeekActive.rawValue
         } else {
