@@ -17,7 +17,7 @@ protocol ScheduleModifying {
 
 // MARK: POSTing Schedules
 extension HueAPI: ScheduleModifying {
-    func updateHueCircadianSchedules() {
+    public func updateHueCircadianSchedules() {
         try? HueAPI.sharedInstance.clearExistingCircadianSchedules()
         try? HueAPI.sharedInstance.postCircadianSchedule()
     }
@@ -116,7 +116,7 @@ extension HueAPI: ScheduleModifying {
         }
     }
     
-    func clearExistingCircadianSchedules() throws {
+    public func clearExistingCircadianSchedules() throws {
         guard let service = service else {
             throw NetworkError.serviceNotInitialized
         }
