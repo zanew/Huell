@@ -15,6 +15,5 @@ struct ContainerError: Codable {
 }
 
 struct HueError: Codable {
-    // TODO: how do I just use this part of the JSON object?
     let error: ContainerError
 }

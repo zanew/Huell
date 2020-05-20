@@ -13,21 +13,21 @@ public class Constants {
     static let numDaysScheduledAhead = 7
     
     public enum HueAPI {
-        enum MiredColorTemps {
-            static let coolest = 153
-            static let warmest = 500
+        public enum MiredColorTemps {
+            public static let coolest = 153
+            public static let warmest = 500
             
-            static let lowestPoint = 417 // ~2400 K
-            static let halfApex = 204 // 4900 K
-            static let solarNoon = 189 // ~5300 K
+            public static let lowestPoint = 417 // ~2400 K
+            public static let halfApex = 204 // 4900 K
+            public static let solarNoon = 189 // ~5300 K
         }
         
-        static let maxBrightness = 254
-        static let minBrightness = 1
-        static let maxSaturation = 254
-        static let redHue = 0
-        static let warmestHue = 4000
-        static let coolestHue = 11500
+        public static let maxBrightness = 254
+        public static let minBrightness = 1
+        public static let maxSaturation = 254
+        public static let redHue = 0
+        public static let warmestHue = 4000
+        public static let coolestHue = 11500
         
         enum GroupSetResponseKeys {
             static let on = "/groups/0/action/on"
@@ -94,7 +94,6 @@ public class Constants {
     
     enum UserDefaultsKeys {
         static let currentBridgeIP = "currentBridgeIP"
-        // TODO: put in keychain
         static let apiUsername = "apiUsername"
         static let respectsDSTKey = "respectsDSTKey"
         static let hasLaunchedKey = "hasLaunchedKey"

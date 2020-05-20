@@ -168,7 +168,6 @@ extension HueAPI: ScheduleModifying {
     func listenForResourceUpdates(withService service: Service, endpoint: String, identifierExtractor extractor:  @escaping ((Data) throws -> Void)) {
         service.resource(endpoint).addObserver(owner: self, closure: {
             [weak self] resource, event in
-            // TODO: why won't this auto-update based on changes in resource state
                 if let weakSelf = self {
                     let data = resource.latestData?.content as? Data
                     

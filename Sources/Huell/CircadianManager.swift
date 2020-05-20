@@ -23,7 +23,7 @@ protocol CircadianCalculator {
     static func upcomingSunsetEnd(forDate date: Date, relativeToTimeZone timeZone: TimeZone) -> Date
 }
 
-class CircadianManager {
+public class CircadianManager {
 }
 
 extension CircadianManager: CircadianCalculator {
@@ -102,13 +102,12 @@ extension CircadianManager: CircadianCalculator {
         }
     }
     
-    static var sunriseAndSetDurationInMilliseconds: Int {
-        // TODO: does this time vary?
+    public static var sunriseAndSetDurationInMilliseconds: Int {
         let thirtyMinutesInMs = 1000 * 60 * 30
         return thirtyMinutesInMs
     }
     
-    static var sunriseAndSetDurationInSeconds: TimeInterval {
+    public static var sunriseAndSetDurationInSeconds: TimeInterval {
         return TimeInterval(sunriseAndSetDurationInMilliseconds / 1000)
     }
     
