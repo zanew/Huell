@@ -16,6 +16,14 @@ protocol RecurringScheduleCreating {
     func recurringWeeklySunsetEndSchedule(forWeekContainingDate date: Date) -> Schedule
 }
 
+public struct DayScheduleSet {
+    let sunrise: Schedule
+    let morning: Schedule
+    let solarNoon: Schedule
+    let halfSet: Schedule
+    let sunsetEnd: Schedule
+}
+
 extension HueAPI: RecurringScheduleCreating {
     func recurringWeeklySunriseStartSchedule(forWeekContainingDate date: Date) -> Schedule {
         let date = CircadianManager.averageSunriseStartDate(forWeekContainingDate: date, relativeToTimeZone: TimeZone.current)

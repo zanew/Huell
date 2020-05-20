@@ -16,11 +16,11 @@ protocol ScheduleCreating {
     var eveningSchedule: Schedule { get }
     var sunsetSchedule: Schedule { get }
     
-    func upcomingDawnSchedule(withDate date: Date) -> Schedule
-    func upcomingMorningSchedule(withDate date: Date) -> Schedule
-    func upcomingMiddaySchedule(withDate date: Date) -> Schedule
-    func upcomingSunsetSchedule(withDate date: Date) -> Schedule
-    func upcomingEveningSchedule(withDate date: Date) -> Schedule
+    func upcomingDawnSchedule(withDate date: Date, body: Body) -> Schedule
+    func upcomingMorningSchedule(withDate date: Date, body: Body) -> Schedule
+    func upcomingMiddaySchedule(withDate date: Date, body: Body) -> Schedule
+    func upcomingSunsetSchedule(withDate date: Date, body: Body) -> Schedule
+    func upcomingEveningSchedule(withDate date: Date, body: Body) -> Schedule
 }
 
 // MARK: dimming and brightening schedule POST strings
@@ -117,8 +117,7 @@ extension HueAPI: ScheduleCreating {
         return scheduleList
     }
     
-    func upcomingDawnSchedule(withDate date: Date) -> Schedule {
-        let body = Body(on: true, brightness: Constants.HueAPI.minBrightness, hue: Constants.HueAPI.warmestHue)
+    func upcomingDawnSchedule(withDate date: Date, body: Body = Body(on: true, brightness: Constants.HueAPI.minBrightness, hue: Constants.HueAPI.warmestHue)) -> Schedule {
         let command = Command(address: allDevicesActionEndpoint, method: .PUT, body: body)
         let sunriseDate = CircadianManager.upcomingSunrise(forDate: date, relativeToTimeZone: TimeZone.current)
         return Schedule(name: Constants.ScheduleDescriptions.dawnName, description: Constants.ScheduleDescriptions.dawnMorningDescription, command: command, localTime: sunriseDate)
@@ -129,8 +128,7 @@ extension HueAPI: ScheduleCreating {
         return upcomingDawnSchedule(withDate: now)
     }
     
-    func upcomingMorningSchedule(withDate date: Date) -> Schedule {
-        let body = Body(on: true, transitionTime: CircadianManager.sunriseAndSetDurationInMilliseconds, brightness: Constants.HueAPI.maxBrightness, hue: Constants.HueAPI.coolestHue)
+    func upcomingMorningSchedule(withDate date: Date, body: Body = Body(on: true, transitionTime: CircadianManager.sunriseAndSetDurationInMilliseconds, brightness: Constants.HueAPI.maxBrightness, hue: Constants.HueAPI.coolestHue)) -> Schedule {
         let command = Command(address: allDevicesActionEndpoint, method: .PUT, body: body)
         let morningDate = CircadianManager.upcomingSunriseEnd(forDate: date, relativeToTimeZone: TimeZone.current)
         return Schedule(name: Constants.ScheduleDescriptions.morningName, description: Constants.ScheduleDescriptions.dawnMorningDescription, command: command, localTime: morningDate)
@@ -141,8 +139,7 @@ extension HueAPI: ScheduleCreating {
         return upcomingMorningSchedule(withDate: now)
     }
     
-    func upcomingMiddaySchedule(withDate date: Date) -> Schedule {
-        let body = Body(on: true, brightness: Constants.HueAPI.maxBrightness, hue: Constants.HueAPI.coolestHue)
+    func upcomingMiddaySchedule(withDate date: Date, body: Body = Body(on: true, brightness: Constants.HueAPI.maxBrightness, hue: Constants.HueAPI.coolestHue)) -> Schedule {
         let command = Command(address: allDevicesActionEndpoint, method: .PUT, body: body)
         let middayDate = CircadianManager.upcomingSolarNoon(forDate: date, relativeToTimeZone: TimeZone.current)
         return Schedule(name: Constants.ScheduleDescriptions.middayName, description: Constants.ScheduleDescriptions.middayDescription, command: command, localTime: middayDate)
@@ -153,8 +150,7 @@ extension HueAPI: ScheduleCreating {
         return upcomingMorningSchedule(withDate: now)
     }
     
-    func upcomingSunsetSchedule(withDate date: Date) -> Schedule {
-        let body = Body(on: true, transitionTime: CircadianManager.sunriseAndSetDurationInMilliseconds, brightness: Constants.HueAPI.minBrightness, hue: Constants.HueAPI.warmestHue)
+    func upcomingSunsetSchedule(withDate date: Date, body: Body = Body(on: true, transitionTime: CircadianManager.sunriseAndSetDurationInMilliseconds, brightness: Constants.HueAPI.minBrightness, hue: Constants.HueAPI.warmestHue)) -> Schedule {
         let command = Command(address: allDevicesActionEndpoint, method: .PUT, body: body)
         let sunsetDate = CircadianManager.upcomingSunset(forDate: date, relativeToTimeZone: TimeZone.current)
         
@@ -166,8 +162,7 @@ extension HueAPI: ScheduleCreating {
         return upcomingSunsetSchedule(withDate: now)
     }
     
-    func upcomingEveningSchedule(withDate date: Date) -> Schedule {
-        let body = Body(on: false)
+    func upcomingEveningSchedule(withDate date: Date, body: Body = Body(on: false)) -> Schedule {
         let command = Command(address: allDevicesActionEndpoint, method: .PUT, body: body)
         let sunsetDate = CircadianManager.upcomingSunsetEnd(forDate: date, relativeToTimeZone: TimeZone.current)
         

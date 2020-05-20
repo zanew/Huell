@@ -36,22 +36,24 @@ extension HueAPI: ScheduleModifying {
         }
     }
     
-    public func postWeeklyCircadianSchedule() throws -> Request {
+    public func postSequentialWeeklyCircadianSchedule() throws -> Request {
         guard let service = service else {
             throw NetworkError.serviceNotInitialized
         }
 
-        return try postWeeklyCircadianSchedule(withService: service)
+        return try postSequentialWeeklyCircadianSchedule(withService: service)
     }
-    
-    public func postWeeklyCircadianSchedule(withService service: Service) throws -> Request {
-        let now = Date()
         
-        let sunriseStartString = try postString(fromSchedule: recurringWeeklySunriseStartSchedule(forWeekContainingDate: now))
-        let morningString = try postString(fromSchedule: recurringWeeklyMorningSchedule(forWeekContainingDate: now))
-        let solarNoonString = try postString(fromSchedule: recurringWeeklySolarNoonSchedule(forWeekContainingDate: now))
-        let halfSetString = try postString(fromSchedule: recurringWeeklyHalfSetSchedule(forWeekContainingDate: now))
-        let sunsetStartString = try postString(fromSchedule: recurringWeeklySunsetEndSchedule(forWeekContainingDate: now))
+    public func postSequentialWeeklyCircadianSchedule(_ scheduleSet: DayScheduleSet) throws -> Request {
+        guard let service = service else {
+            throw NetworkError.serviceNotInitialized
+        }
+        
+        let sunriseStartString = try postString(fromSchedule: scheduleSet.sunrise)
+        let morningString = try postString(fromSchedule: scheduleSet.morning)
+        let solarNoonString = try postString(fromSchedule: scheduleSet.solarNoon)
+        let halfSetString = try postString(fromSchedule: scheduleSet.halfSet)
+        let sunsetEndString = try postString(fromSchedule: scheduleSet.sunsetEnd)
         
         return service.resource(schedulesEndpoint).request(.post, text: sunriseStartString).onSuccess({
             _ in
@@ -61,7 +63,34 @@ extension HueAPI: ScheduleModifying {
                     _ in
                     service.resource(self.schedulesEndpoint).request(.post, text: halfSetString).onSuccess({
                         _ in
-                        service.resource(self.schedulesEndpoint).request(.post, text: sunsetStartString).onSuccess({
+                        service.resource(self.schedulesEndpoint).request(.post, text: sunsetEndString).onSuccess({
+                            _ in
+                            print("Successfully posted the schedule!!! 🤩")
+                        })
+                    })
+                })
+            })
+        })
+    }
+    
+    public func postSequentialWeeklyCircadianSchedule(withService service: Service) throws -> Request {
+        let now = Date()
+        
+        let sunriseStartString = try postString(fromSchedule: recurringWeeklySunriseStartSchedule(forWeekContainingDate: now))
+        let morningString = try postString(fromSchedule: recurringWeeklyMorningSchedule(forWeekContainingDate: now))
+        let solarNoonString = try postString(fromSchedule: recurringWeeklySolarNoonSchedule(forWeekContainingDate: now))
+        let halfSetString = try postString(fromSchedule: recurringWeeklyHalfSetSchedule(forWeekContainingDate: now))
+        let sunsetEndString = try postString(fromSchedule: recurringWeeklySunsetEndSchedule(forWeekContainingDate: now))
+        
+        return service.resource(schedulesEndpoint).request(.post, text: sunriseStartString).onSuccess({
+            _ in
+            service.resource(self.schedulesEndpoint).request(.post, text: morningString).onSuccess({
+                _ in
+                service.resource(self.schedulesEndpoint).request(.post, text: solarNoonString).onSuccess({
+                    _ in
+                    service.resource(self.schedulesEndpoint).request(.post, text: halfSetString).onSuccess({
+                        _ in
+                        service.resource(self.schedulesEndpoint).request(.post, text: sunsetEndString).onSuccess({
                             _ in
                             print("Successfully posted the schedule!!! 🤩")
                         })
@@ -72,9 +101,13 @@ extension HueAPI: ScheduleModifying {
     }
     
     public func postCircadianSchedule() throws {
+        let scheduleList = createFutureSchedules(daysAhead: Constants.numDaysScheduledAhead)
+        try postCircadianSchedules(scheduleList)
+    }
+    
+    public func postCircadianSchedules(_ schedules: [Schedule]) throws {
         do {
-            let scheduleList = createFutureSchedules(daysAhead: Constants.numDaysScheduledAhead)
-            if let stringList = try? postStrings(fromSchedules: scheduleList) {
+            if let stringList = try? postStrings(fromSchedules: schedules) {
                 stringList.forEach({ print("\(String(describing: $0))") })
                 
                 guard let service = service else {

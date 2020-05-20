@@ -8,13 +8,13 @@
 
 import UIKit
 
-struct Schedule: Codable {
-    let name: String
-    let description: String
-    let command: Command
-    let localTime: Date
+public struct Schedule: Codable {
+    public let name: String
+    public let description: String
+    public let command: Command
+    public let localTime: Date
     
-    enum CodingKeys: String, CodingKey {
+    public enum CodingKeys: String, CodingKey {
         case name
         case description
         case command
@@ -22,29 +22,29 @@ struct Schedule: Codable {
     }
 }
 
-struct Command: Codable {
-    let address: String
-    let method: Method
-    let body: Body
+public struct Command: Codable {
+    public let address: String
+    public let method: Method
+    public let body: Body
 }
 
-enum Method: String, Codable {
+public enum Method: String, Codable {
     case PUT
     case POST
     case GET
     case DELETE
 }
 
-struct Body: Codable, Equatable {
-    let on: Bool?
-    let colorTemperature: Int?
+public struct Body: Codable, Equatable {
+    public let on: Bool?
+    public let colorTemperature: Int?
     // in milliseconds
-    let transitionTime: Int?
-    let brightness: Int?
-    let hue: Int?
-    let saturation: Int?
+    public let transitionTime: Int?
+    public let brightness: Int?
+    public let hue: Int?
+    public let saturation: Int?
     
-    init(on: Bool? = nil, colorTemperature: Int? = nil, transitionTime: Int? = nil, brightness: Int? = nil, hue: Int? = nil, saturation: Int? = nil) {
+    public init(on: Bool? = nil, colorTemperature: Int? = nil, transitionTime: Int? = nil, brightness: Int? = nil, hue: Int? = nil, saturation: Int? = nil) {
         self.on = on
         self.colorTemperature = colorTemperature
         self.transitionTime = transitionTime
@@ -53,7 +53,7 @@ struct Body: Codable, Equatable {
         self.saturation = saturation
     }
     
-    enum CodingKeys: String, CodingKey {
+    public enum CodingKeys: String, CodingKey {
         case on
         case hue
         case colorTemperature = "ct"
