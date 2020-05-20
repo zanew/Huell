@@ -16,9 +16,7 @@ instance and authenticating.
         print("error: \(error)")
     }
 
-This returns a request object which you can use to determine whether or not the configuration was successful as demonstrated above.
-
-Then listen for updates to schedules that are posted with `listenForSchedulesResource(withService service: Service)`
+This returns a request object which you can use to determine whether or not the configuration was successful as demonstrated above. Then listen for updates to schedules that are posted with `listenForSchedulesResource(withService service: Service)`
 
 ## Creating schedules
 
